@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo Mario-GTA</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #87CEEB; /* cor do céu */
+        }
+        canvas {
+            display: block;
+            background: #32CD32; /* cor do fundo do jogo */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Configurações do personagem
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 150,
+            width: 50,
+            height: 50,
+            color: 'blue',
+            dx: 0,
+            dy: 0,
+            speed: 5
+        };
+
+        // Desenha o personagem
+        function drawPlayer() {
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+        }
+
+        // Atualiza a posição do personagem
+        function update() {
+            player.x += player.dx;
+            player.y += player.dy;
+
+            // Limita o movimento do personagem dentro da tela
+            if (player.x < 0) player.x = 0;
+            if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+            if (player.y < 0) player.y = 0;
+            if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
+        }
+
+        // Desenha o jogo
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawPlayer();
+        }
+
+        // Função principal do jogo
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+
+        // Controle do teclado
+        window.addEventListener('keydown', (e) => {
+            switch (e.key) {
+                case 'ArrowUp':
+                    player.dy = -player.speed;
+                    break;
+                case 'ArrowDown':
+                    player.dy = player.speed;
+                    break;
+                case 'ArrowLeft':
+                    player.dx = -player.speed;
+                    break;
+                case 'ArrowRight':
+                    player.dx = player.speed;
+                    break;
+            }
+        });
+
+        window.addEventListener('keyup', (e) => {
+            switch (e.key) {
+                case 'ArrowUp':
+                case 'ArrowDown':
+                    player.dy = 0;
+                    break;
+                case 'ArrowLeft':
+                case 'ArrowRight':
+                    player.dx = 0;
+                    break;
+            }
+        });
+    </script>
+</body>
+</html>
